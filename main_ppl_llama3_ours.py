@@ -22,15 +22,15 @@ import Rodrope
 from torch import nn
 
 # ==================== 配置：直接改这里 ====================
-MODEL_PATH = "/home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct"
+MODEL_PATH = "/path/to/meta-llamaMeta-Llama-3-8B-Instruct"
 
 # tokenized 好的 GovReport 测试集（你之前命令里的那个）
 # TOKENIZED_DATASET_PATH = (
-#     "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozillaproofpile-test-tokenized-llama3/"
+#     "/path/to/emozillaproofpile-test-tokenized-llama3/"
 # )
 
 TOKENIZED_DATASET_PATH = (
-    "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozilla-govreport-test-tokenized-llama3/"
+    "/path/to/emozilla-govreport-test-tokenized-llama3/"
 )
 
 DATASET_MIN_TOKENS = 16384   # 过滤太短的样本

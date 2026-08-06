@@ -5,7 +5,7 @@ LongBench evaluation for Llama-3-Instruct with ROD-RoPE.
 Example:
 CUDA_VISIBLE_DEVICES=0 python main_longbench_llama3_ours.py \
     --datasets narrativeqa qasper gov_report \
-    --model_path /home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct \
+    --model_path /path/to/meta-llamaMeta-Llama-3-8B-Instruct \
     --max_length 32768 \
     --rodrope_block 3 --m1 256 --lambda2 6.85 --m2 4096 --lambda3 16.0 \
     --evaluate
@@ -33,8 +33,8 @@ warnings.filterwarnings("ignore")
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-LONG_BENCH_ROOT = "/home/liujia/allcode/LongBench-main"
-MODEL_PATH = "/home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct"
+LONG_BENCH_ROOT = "/path/to/LongBench-main"
+MODEL_PATH = "/path/to/meta-llamaMeta-Llama-3-8B-Instruct"
 
 LONG_BENCH_DATASETS = [
     "narrativeqa",

@@ -1,12 +1,6 @@
 """
 Needle-in-a-Haystack test with LLaMA-3 + configurable fixed-block Rodrope(flash_attn).
 
-CUDA_VISIBLE_DEVICES=2,1,0 python needle_in_haystack_Rodrope.py \
-    --s_len 0 --e_len 16000 \
-    --model_path /home/liujia/llama-2-7b-chat \
-    --model_provider LLaMA \
-    --m2 4096 --lambda3 16.0
-"""
 
 import tiktoken
 import os
@@ -549,7 +543,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--s_len', metavar='N', type=int, default=0, help='a number')
     parser.add_argument('-e', '--e_len', metavar='N', type=int, default=160000, help='a number')
-    parser.add_argument('--model_path', type=str, default='/home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct', help='path to model')
+    parser.add_argument('--model_path', type=str, default='/path/to/meta-llamaMeta-Llama-3-8B-Instruct', help='path to model')
     parser.add_argument('--model_name', type=str, default=None, help='name of model')
     parser.add_argument('--model_name_suffix', type=str, default=None, help='name of model')
     parser.add_argument('--model_provider', type=str, default="LLaMA", help='which model to use')

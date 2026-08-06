@@ -1,0 +1,56 @@
+
+#
+# Environment used for the current experiments:
+#   conda env: rodrope
+#   python: 3.9.25
+#   torch: 2.1.2 + CUDA 11.8
+#   transformers: 4.38.2
+#
+# The experiments in this repository use Llama-2-7B-Chat,
+# Llama-3-8B-Instruct, and Mistral-7B-Instruct.
+#
+# CUDA 11.8 PyTorch wheels.
+--extra-index-url https://download.pytorch.org/whl/cu118
+#
+# flash-attn is CUDA/PyTorch/Python-version sensitive. In the local
+# rodrope environment it is installed from a cp39 wheel:
+#   flash_attn-2.5.6+cu118torch2.1cxx11abiFALSE-cp39-cp39-linux_x86_64.whl
+# If pip cannot build/install it directly, install a matching wheel manually, e.g.:
+#   pip install flash-attn==2.5.6 --no-build-isolation
+
+# Core LLM runtime
+torch==2.1.2+cu118
+transformers==4.38.2
+accelerate==1.10.1
+flash-attn==2.5.6
+triton==2.1.0
+safetensors==0.6.2
+sentencepiece==0.2.1
+tokenizers==0.15.2
+huggingface-hub==0.36.0
+
+# Bayesian optimization
+botorch==0.10.0
+gpytorch==1.11
+linear-operator==0.5.1
+pyro-ppl==1.9.1
+pyro-api==0.1.2
+scipy==1.13.1
+
+# Data processing and evaluation
+datasets==4.4.1
+numpy==1.26.3
+pandas==2.3.3
+pyarrow==21.0.0
+tqdm==4.67.1
+json_repair==0.44.1
+jsonlines==4.0.0
+rouge_score==0.1.2
+tiktoken==0.12.0
+openai==2.8.1
+requests==2.32.5
+
+# Plotting and build helpers
+matplotlib==3.9.4
+seaborn==0.13.2
+ninja==1.13.0

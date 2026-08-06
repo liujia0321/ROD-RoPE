@@ -1,4 +1,5 @@
 # ROD-RoPE
+Official implementation of ROD-RoPE: Optimization-driven RoPE position remapping for long-context extrapolation without tuning LLM parameters.
 
 Official implementation of the paper:
 
@@ -7,9 +8,9 @@ Official implementation of the paper:
 ROD-RoPE is the codebase for the paper **Optimization-Driven Framework for Long-Context Extrapolation Without Fine-Tuning LLMs**. The project implements a training-free RoPE position-remapping method for extending the context window of RoPE-based large language models, together with Bayesian optimization scripts for selecting high-performing ROD-RoPE hyperparameters. 
 
 The experiments in this repository use 
-- **Llama-2-7B-Chat**
-- **Llama-3-8B-Instruct**
-- **Mistral-7B-Instruct**
+- **[Llama-2-7B-Chat](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf)**
+- **[Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)**
+- **[Mistral-7B-Instruct](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1)**
 ![ROD-RoPE overview](img/Overview.png)
 
 ## Overview

@@ -29,9 +29,9 @@ warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # ==================== default config: keep aligned with optimizatin_allblock_mistral.py ====================
-MODEL_PATH = "/data/liujia/model/Mistral-7B-Instruct-v0.1"
-RESULTS_ROOT = "/home/liujia/allcode/ROPE-MLP/counting-stars-jsonl3-allblock-mistral-2"
-COUNTING_CONTEXT_ROOT = "/home/liujia/allcode/Counting-Stars-main/context_data"
+MODEL_PATH = "/path/to/Mistral-7B-Instruct-v0.1"
+RESULTS_ROOT = "/path/to/counting-stars"
+COUNTING_CONTEXT_ROOT = "/path/to/context_data"
 
 LANGUAGE = "EN"
 M = 8

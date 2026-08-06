@@ -107,14 +107,14 @@ def patch_rope_for_rodrope(model):
 def get_context(language: str) -> str:
     if language == "EN":
         context = ""
-        for file in glob.glob("/home/liujia/allcode/Counting-Stars-main/context_data/PaulGrahamEssays/*.txt"):
+        for file in glob.glob("/path/to/context_data/PaulGrahamEssays/*.txt"):
             with open(file, 'r') as f:
                 context += f.read().replace("\n", " ")
         return context
     elif language == "ZH":
         string_punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
         context_file = open(
-            "/home/liujia/allcode/Counting-Stars-main/context_data/The_Story_of_the_Stone.txt",
+            "/path/to/context_data/The_Story_of_the_Stone.txt",
             "r",
             encoding="utf-8"
         )
@@ -219,9 +219,9 @@ def extract_numbers_from_string(string: str) -> List[int]:
 
 
 def get_reasoning_score(index, pre):
-    with open("/home/liujia/allcode/Counting-Stars-main/context_data/a_stars.txt", "r") as f:
+    with open("/path/to/context_data/a_stars.txt", "r") as f:
         a_stars = eval(f.readline())["8"]
-    with open("/home/liujia/allcode/Counting-Stars-main/context_data/r_stars.txt", "r") as f:
+    with open("/path/to/context_data/r_stars.txt", "r") as f:
         r_stars = eval(f.readline())["8"]
     if a_stars[index] in pre and r_stars[index] in pre:
         return 0.5
@@ -384,8 +384,8 @@ def worker_eval_both(
     m: int = 8,
     n: int = 8,
     max_context_length: int = 16384,
-    model_path: str = "/home/liujia/llama-2-7b-chat",
-    results_root: str = "/home/liujia/allcode/ROPE-MLP/llama2-5-counting-stars-jsonl2-allblock",
+    model_path: str = "/path/to/llama-2-7b-chat",
+    results_root: str = "/path/to/llama2",
     run_tag: str = "manual",
 ) -> Tuple[float, float]:
     """
@@ -466,10 +466,10 @@ def worker_eval_both(
     Rodrope.apply(model, **apply_kwargs)
 
     a_stars = get_stars(
-        "/home/liujia/allcode/Counting-Stars-main/context_data/a_stars.txt", m
+        "/path/to/context_data/a_stars.txt", m
     )
     r_stars = get_stars(
-        "/home/liujia/allcode/Counting-Stars-main/context_data/r_stars.txt", m
+        "/path/to/context_data/r_stars.txt", m
     )
     context = get_context(language)
 
@@ -633,8 +633,8 @@ def worker_main():
     print(json.dumps({"f_acq": f_acq, "f_reason": f_reason}))
 
 
-EXPERIMENT_DIR = "/home/liujia/allcode/ROPE-MLP"
-LOG_FILE = os.path.join(EXPERIMENT_DIR, "llama2_allblock_multiotimization_bo_2objective_log.csv")
+EXPERIMENT_DIR = "/path/to/result"
+LOG_FILE = os.path.join(EXPERIMENT_DIR, "result.csv")
 GLOBAL_EVAL_ID = 0
 
 

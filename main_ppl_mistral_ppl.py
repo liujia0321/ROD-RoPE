@@ -22,15 +22,15 @@ import Rodrope
 from torch import nn
 
 # ==================== 配置：直接改这里 ====================
-MODEL_PATH = "/data/liujia/model/Mistral-7B-Instruct-v0.1"
+MODEL_PATH = "/path/to/Mistral-7B-Instruct-v0.1"
 
 # tokenized 好的 Mistral GovReport 测试集，路径来自 main_ppl_mistral_self.py
 # TOKENIZED_DATASET_PATH = (
-#     "/home/liujia/allcode/ROD-RoPE/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozillaproofpile-test-tokenized-mistral/"
+#     "/path/to/emozillaproofpile-test-tokenized-mistral/"
 # )
 
 TOKENIZED_DATASET_PATH = (
-    "/home/liujia/allcode/ROD-RoPE/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozillagovreport-test-tokenized-mistral/"
+    "/path/to/emozillagovreport-test-tokenized-mistral/"
 )
 
 DATASET_MIN_TOKENS = 16384   # 过滤太短的样本

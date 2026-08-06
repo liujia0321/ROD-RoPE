@@ -33,11 +33,11 @@ warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # ==================== default config: keep aligned with optimizatin_allblock_llama3.py ====================
-MODEL_PATH = "/home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct"
-RESULTS_ROOT = "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/result/counting-stars/llama3"
-COUNTING_CONTEXT_ROOT = "/home/liujia/allcode/Counting-Stars-main/context_data"
-ACQ_PDF_PATH = "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/result/counting-stars/llama3/acq.pdf"
-REA_PDF_PATH = "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/result/counting-stars/llama3/rea.pdf"
+MODEL_PATH = "/path/to/meta-llamaMeta-Llama-3-8B-Instruct"
+RESULTS_ROOT = "/path/to/result/counting-stars/llama3"
+COUNTING_CONTEXT_ROOT = "/path/to/context_data"
+ACQ_PDF_PATH = "/path/to/result/counting-stars/llama3/acq.pdf"
+REA_PDF_PATH = "/path/to/result/counting-stars/llama3/rea.pdf"
 
 LANGUAGE = "EN"
 M = 8

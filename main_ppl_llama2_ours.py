@@ -22,17 +22,17 @@ import Rodrope
 from torch import nn
 
 # ==================== 配置：直接改这里 ====================
-MODEL_PATH = "/home/liujia/llama-2-7b-chat"
-# MODEL_PATH=/home/liujia/llama-2-7b-chat
+MODEL_PATH = "/path/to/llama-2-7b-chat"
+# MODEL_PATH=/path/to/llama-2-7b-chat
 
 
 
 # tokenized 好的 GovReport 测试集（你之前命令里的那个）
 # TOKENIZED_DATASET_PATH = (
-#     "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozilla-proofpile-test-tokenized-llama2/"
+#     "/path/to/emozilla-proofpile-test-tokenized-llama2/"
 # )
 TOKENIZED_DATASET_PATH = (
-    "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/datasets/emozilla-govreport-test-tokenized-llama2/"
+    "/path/to/emozilla-govreport-test-tokenized-llama2/"
 )
 
 DATASET_MIN_TOKENS = 16384   # 过滤太短的样本
@@ -47,7 +47,7 @@ TRUNCATE = True
 AGGRESSIVE_MEMORY = True
 
 # 输出 CSV 文件
-OUTPUT_CSV = "/home/liujia/allcode/Extend_context_window_of_LLM/AEHVI-ROPE/result/PPL/llama2_govreport-RODROPE-window512-selected-configs.csv"
+OUTPUT_CSV = "/path/to/result/PPL/llama2_govreport.csv"
 
 # Rodrope 参数：逐个测试这些候选配置的 PPL。
 # block=2 时 m2/lambda3/m3/lambda4 写 None；block=3 时 m3/lambda4 写 None。

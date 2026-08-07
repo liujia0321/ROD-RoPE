@@ -154,8 +154,8 @@ def apply(
     arch_name = loaded_model.__class__.__name__
     if block == 3 and not ('Llama' in arch_name or 'Mistral' in arch_name):
         raise NotImplementedError("Three-block Rodrope is currently implemented for Llama/Mistral flash_attn only.")
-    if block == 4 and 'Llama' not in arch_name:
-        raise NotImplementedError("Four-block Rodrope is currently implemented for Llama flash_attn only.")
+    if block == 4 and not ('Llama' in arch_name or 'Mistral' in arch_name):
+        raise NotImplementedError("Four-block Rodrope is currently implemented for Llama/Mistral flash_attn only.")
     if 'Llama' in arch_name:
         if enable_flash_attention:
             if flash_attention_impl == "flash_attn":
@@ -218,7 +218,7 @@ def apply(
             if not modifed_2:
                 raise Exception(f"Failed to modify the attention method of {arch_name}")
     elif 'Mistral' in arch_name:
-        # Mistral shares the Llama-style Rodrope implementation, including 3block in flash_attn mode.
+        # Mistral shares the Llama-style Rodrope implementation, including 3/4-block in flash_attn mode.
         if enable_flash_attention:
             if flash_attention_impl != "flash_attn":
                 if block in (3, 4):
@@ -229,12 +229,22 @@ def apply(
                                                 group_size_1=group_size,
                                                 group_size_2=window_size,
                                                 scale_base=scale_base)
-            else:
+            elif block == 3:
                 rodrope_attention_forward = partial(RP.Mistral.flash_rodrope_three_block_forward,
                                                 group_size_1=group_size,
                                                 group_size_2=window_size,
                                                 far_size=far_size,
                                                 far_group_size=far_group_size,
+                                                block=block,
+                                                scale_base=scale_base)
+            else:
+                rodrope_attention_forward = partial(RP.Mistral.flash_rodrope_four_block_forward,
+                                                group_size_1=group_size,
+                                                group_size_2=window_size,
+                                                far_size=far_size,
+                                                far_group_size=far_group_size,
+                                                far2_size=far2_size,
+                                                far2_group_size=far2_group_size,
                                                 block=block,
                                                 scale_base=scale_base)
             modifed_1 = modify_method_of_instance(loaded_model, "MistralFlashAttention2", "_flash_attention_forward", RP.Rodrope_flash_attn.flash_attention2_forward_with_window_size)

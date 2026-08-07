@@ -21,9 +21,9 @@ import datetime
 warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-MODEL_PATH = "/home/liujia/allcode/meta-llamaMeta-Llama-3-8B-Instruct"
-RESULTS_ROOT = "/home/liujia/allcode/ROPE-MLP/counting-stars-jsonl3-allblock"
-COUNTING_CONTEXT_ROOT = "/home/liujia/allcode/Counting-Stars-main/context_data"
+MODEL_PATH = "/path/to/meta-llamaMeta-Llama-3-8B-Instruct"
+RESULTS_ROOT = "/path/to/counting-stars-jsonl"
+COUNTING_CONTEXT_ROOT = "/path/to/context_data"
 LANGUAGE = "EN"
 M = 8
 N = 8
@@ -692,14 +692,14 @@ def worker_main():
 
 
 EXPERIMENT_DIR = RESULTS_ROOT
-LOG_FILE = os.path.join(EXPERIMENT_DIR, "llama3_allblock_multiotimization_bo_2objective_log.csv")
+LOG_FILE = os.path.join(EXPERIMENT_DIR, "llama3_log.csv")
 GLOBAL_EVAL_ID = 0
 
 
 def set_experiment_dir(experiment_dir: str) -> None:
     global EXPERIMENT_DIR, LOG_FILE
     EXPERIMENT_DIR = experiment_dir
-    LOG_FILE = os.path.join(EXPERIMENT_DIR, "llama3_allblock_multiotimization_bo_2objective_log.csv")
+    LOG_FILE = os.path.join(EXPERIMENT_DIR, "llama3_log.csv")
 
 
 def init_log_file():
@@ -1146,7 +1146,7 @@ def alternating_bo_for_block(
     N0: int = INITIAL_SAMPLE_SIZE,
     raw_samples: int = 64,
     num_restarts: int = 5,
-    maxiter: int = 50,
+    maxiter: int = 100,
     seed: int = 0,
     xi: float = EI_XI,
     language: str = LANGUAGE,
@@ -1402,10 +1402,10 @@ def alternating_bo_for_block(
 def alternating_bo(
     T: int = INNER_ITERATIONS,
     N0: int = INITIAL_SAMPLE_SIZE,
-    raw_samples: int = 64,
-    num_restarts: int = 5,
-    maxiter: int = 50,
-    seed: int = 0,
+    raw_samples: int = 256,
+    num_restarts: int = 256,
+    maxiter: int = 100,
+    seed: int = 100,
     blocks: Tuple[int, ...] = (2, 3, 4),
     xi: float = EI_XI,
     language: str = LANGUAGE,

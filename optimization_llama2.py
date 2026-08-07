@@ -1055,10 +1055,10 @@ def alternating_bo_for_block(
     rodrope_block: int,
     T: int = INNER_ITERATIONS,
     N0: int = INITIAL_SAMPLE_SIZE,
-    raw_samples: int = 64,
-    num_restarts: int = 5,
+    raw_samples: int = 256,
+    num_restarts: int = 256,
     maxiter: int = 50,
-    seed: int = 0,
+    seed: int = 100,
     xi: float = EI_XI,
 ) -> Tuple[Tensor, Tensor, Tensor]:
     torch.manual_seed(seed)
@@ -1289,10 +1289,10 @@ def alternating_bo_for_block(
 def alternating_bo(
     T: int = INNER_ITERATIONS,
     N0: int = INITIAL_SAMPLE_SIZE,
-    raw_samples: int = 64,
-    num_restarts: int = 5,
+    raw_samples: int = 256,
+    num_restarts: int = 256,
     maxiter: int = 50,
-    seed: int = 0,
+    seed: int = 100,
     blocks: Tuple[int, ...] = (2, 3, 4),
     xi: float = EI_XI,
 ):
@@ -1325,7 +1325,7 @@ if __name__ == "__main__":
             N0=INITIAL_SAMPLE_SIZE,
             raw_samples=256,
             num_restarts=256,
-            maxiter=200,
+            maxiter=50,
             seed=100,
             blocks=(2, 3, 4),
             xi=EI_XI,

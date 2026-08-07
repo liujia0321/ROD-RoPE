@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # transformers==4.38.2
 # 需要: botorch, gpytorch, json_repair, pandas, transformers, torch
-# Mistral version of optimizatin_allblock_llama3.py.
+
 import os
 import sys
 import gc
@@ -108,14 +108,14 @@ def patch_rope_for_rodrope(model):
 def get_context(language: str) -> str:
     if language == "EN":
         context = ""
-        for file in glob.glob("/home/liujia/allcode/Counting-Stars-main/context_data/PaulGrahamEssays/*.txt"):
+        for file in glob.glob("/path/to/context_data/PaulGrahamEssays/*.txt"):
             with open(file, 'r') as f:
                 context += f.read().replace("\n", " ")
         return context
     elif language == "ZH":
         string_punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
         context_file = open(
-            "/home/liujia/allcode/Counting-Stars-main/context_data/The_Story_of_the_Stone.txt",
+            "/path/to/context_data/The_Story_of_the_Stone.txt",
             "r",
             encoding="utf-8"
         )
@@ -220,9 +220,9 @@ def extract_numbers_from_string(string: str) -> List[int]:
 
 
 def get_reasoning_score(index, pre):
-    with open("/home/liujia/allcode/Counting-Stars-main/context_data/a_stars.txt", "r") as f:
+    with open("/path/to/Counting-Stars-main/context_data/a_stars.txt", "r") as f:
         a_stars = eval(f.readline())["8"]
-    with open("/home/liujia/allcode/Counting-Stars-main/context_data/r_stars.txt", "r") as f:
+    with open("/path/to/Counting-Stars-main/context_data/r_stars.txt", "r") as f:
         r_stars = eval(f.readline())["8"]
     if a_stars[index] in pre and r_stars[index] in pre:
         return 0.5
@@ -393,8 +393,8 @@ def get_data_ZH(folder_path, max_context_length, m, n, test_type):
     return pivot_table, pivot_table.mean(axis=None).round(3)
 
 
-DEFAULT_MODEL_PATH = "/data/liujia/model/Mistral-7B-Instruct-v0.1"
-DEFAULT_RESULTS_ROOT = "/home/liujia/allcode/ROPE-MLP/counting-stars-jsonl3-allblock-mistral-2"
+DEFAULT_MODEL_PATH = "/path/to/Mistral-7B-Instruct-v0.1"
+DEFAULT_RESULTS_ROOT = "/path/to/counting-stars-jsonl-mistral"
 
 # =====================================================================
 # 3. worker 子进程：给定固定 block 的 Rodrope 参数，评估 acquisition + reasoning
@@ -473,6 +473,7 @@ def worker_eval_both(
         config.sliding_window = None
 
     dtype = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else torch.float16
+    loaded_with_flash = False
     try:
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
@@ -481,8 +482,11 @@ def worker_eval_both(
             attn_implementation="flash_attention_2",
             device_map="auto"
         )
+        loaded_with_flash = True
     except Exception as e:
         print(f"[warn] flash_attention_2 load failed: {e}\n       fallback to eager.", flush=True)
+        if rodrope_block >= 3:
+            raise RuntimeError("Mistral block>=3/4 ROD-RoPE requires flash_attention_2.") from e
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             config=config,
@@ -496,7 +500,7 @@ def worker_eval_both(
     apply_kwargs = dict(
         group_size=lambda2_raw,
         window_size=m1,
-        enable_flash_attention=True,
+        enable_flash_attention=loaded_with_flash,
         flash_attention_impl="flash_attn",
         block=rodrope_block,
     )
@@ -513,10 +517,10 @@ def worker_eval_both(
     Rodrope.apply(model, **apply_kwargs)
 
     a_stars = get_stars(
-        "/home/liujia/allcode/Counting-Stars-main/context_data/a_stars.txt", m
+        "/path/to/context_data/a_stars.txt", m
     )
     r_stars = get_stars(
-        "/home/liujia/allcode/Counting-Stars-main/context_data/r_stars.txt", m
+        "/path/to/context_data/r_stars.txt", m
     )
     context = get_context(language)
 
@@ -680,8 +684,8 @@ def worker_main():
     print(json.dumps({"f_acq": f_acq, "f_reason": f_reason}))
 
 
-EXPERIMENT_DIR = "/home/liujia/allcode/ROPE-MLP"
-LOG_FILE = os.path.join(EXPERIMENT_DIR, "mistral_allblock_multiotimization_bo_2objective_log.csv")
+EXPERIMENT_DIR = "/path/to/optimization"
+LOG_FILE = os.path.join(EXPERIMENT_DIR, "mistral_log.csv")
 GLOBAL_EVAL_ID = 0
 
 
@@ -1363,17 +1367,31 @@ def alternating_bo(
 # 6. 主入口
 # =====================================================================
 
+def parse_main_args():
+    parser = argparse.ArgumentParser(description="Bayesian optimization for Mistral ROD-RoPE blocks")
+    parser.add_argument("--blocks", type=int, nargs="+", choices=[2, 3, 4], default=[2, 3, 4], help="which fixed block counts to optimize")
+    parser.add_argument("--initial_sample_size", type=int, default=INITIAL_SAMPLE_SIZE, help="number of random initial samples per block")
+    parser.add_argument("--inner_iterations", type=int, default=INNER_ITERATIONS, help="number of BO iterations per block")
+    parser.add_argument("--raw_samples", type=int, default=256, help="raw samples for optimize_acqf")
+    parser.add_argument("--num_restarts", type=int, default=256, help="restart count for optimize_acqf")
+    parser.add_argument("--maxiter", type=int, default=200, help="max optimizer iterations for each optimize_acqf call")
+    parser.add_argument("--seed", type=int, default=100, help="base random seed")
+    parser.add_argument("--xi", type=float, default=EI_XI, help="EI exploration offset")
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     if "--worker" in sys.argv:
         worker_main()
     else:
+        args = parse_main_args()
         best_results = alternating_bo(
-            T=INNER_ITERATIONS,
-            N0=INITIAL_SAMPLE_SIZE,
-            raw_samples=256,
-            num_restarts=256,
-            maxiter=200,
-            seed=100,
-            blocks=(2, 3, 4),
-            xi=EI_XI,
+            T=args.inner_iterations,
+            N0=args.initial_sample_size,
+            raw_samples=args.raw_samples,
+            num_restarts=args.num_restarts,
+            maxiter=args.maxiter,
+            seed=args.seed,
+            blocks=tuple(args.blocks),
+            xi=args.xi,
         )
